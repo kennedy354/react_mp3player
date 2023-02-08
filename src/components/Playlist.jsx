@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import napster from "../services/napster"
 
-function Player({ song }) {
+function Playlist({ song }) {
 
     const [isPlaying, setIsPlaying] = useState(false)
     const [tracks, setTracks] = useState([])
@@ -22,11 +22,6 @@ function Player({ song }) {
         setTracks(musics.data.tracks)
     }
 
-    const loadSong = url => {
-        music.current.src = tracks[currentIndex]?.previewURL
-        play()
-    }
-
     const play = () => {
         music.current.play()
         setIsPlaying(true)
@@ -37,24 +32,51 @@ function Player({ song }) {
         setIsPlaying(false)
     }
 
-    const next = () => {
-        setCurrentIndex(i => i > 19 ?  0 : i + 1)
-        loadSong(tracks[currentIndex]?.previewURL)
-    }
-
-    const prev = () => {
-        setCurrentIndex(i => i < 0 ?  19 : i - 1)
-        loadSong(tracks[currentIndex]?.previewURL)
+    function bagaceira(link){
+        if(music.current.src==link){
+            if (isPlaying==true){
+                pause()
+            }
+            else if (isPlaying==false){
+                play()
+            }
+        }
+        else{
+            music.current.src = link
+            play()
+        }
     }
 
     return (
         <>
-        <h3>colocar um for pra mostrar o array inteiro</h3>
-        <div>
-            <b>Música:</b> {tracks[4]?.name} <b>Album:</b> {tracks[4]?.albumName} <b>Artista:</b> {tracks[4]?.artistName}
-        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Música</th>
+                <th>Album</th>
+                <th>Artista</th>
+                <th>Tocar</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {tracks.map(({albumName, artistName, name, id, previewURL}) => (
+                    <tr key={id}>
+                        <td>{name}</td>
+                        <td>{albumName}</td>
+                        <td>{artistName}</td>
+                        <td>
+                            <audio ref={music} src={previewURL}></audio>
+                            <button onClick={()=> bagaceira(previewURL)}>
+                                Play
+                            </button>
+                        </td>
+                    </tr>
+            ))}
+            </tbody>
+        </table>
         </>
     )
 }
 
-export default Player
+export default Playlist

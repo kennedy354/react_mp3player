@@ -46,7 +46,17 @@ function Player({ song }) {
         setCurrentIndex(i => i < 0 ?  19 : i - 1)
         loadSong(tracks[currentIndex]?.previewURL)
     }
-
+/*
+    function bagaceira(link){
+        music.current.src = link
+        if (isPlaying==true){
+            pause()
+        }
+        else if(isPlaying==false){
+            play()
+        }
+    }
+*/
     return (
         <div>
             {isPlaying ? (
